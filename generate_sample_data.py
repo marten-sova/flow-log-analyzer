@@ -14,6 +14,8 @@ import argparse
 import csv
 import random
 import time
+import uuid
+from analyze import get_protocol_name
 
 ports = [25, 68, 23, 31, 443, 22, 3389, 0, 110, 993, 143, 49153, 49154, 1024]
 protocols = ['tcp', 'udp', 'icmp']
@@ -30,8 +32,29 @@ def generate_random_enis():
     return f"eni-{''.join(random.choices('0123456789abcdef', k=8))}"
 
 def generate_random_port():
-    """Generate a random port number between 1 and 65535."""
-    return random.randint(1, 65535)
+    """Generate a random port number between 1 and 1000."""
+    return random.randint(1, 1000)
+
+def generate_random_tag():
+    """Return a random preset tag or a random hex string."""
+    heads = random.randint(0,1)
+    if heads == 1:
+        return random.choice(tags)
+    return uuid.uuid4().hex[:6]
+
+def generate_random_protocol_name():
+    """Return a common protocol or an unusual protocol (50/50)"""
+    heads = random.randint(0,10)
+    if heads > 0:
+        return random.choice(protocols)
+    return get_protocol_name(random.randint(0, 145))
+
+def generate_random_protocol_number():
+    """Return a common protocol number or an unusual protocol number"""
+    heads = random.randint(0,10)
+    if heads > 0:
+        return random.choice(protocol_nums)
+    return random.randint(0, 145)
 
 def generate_random_action():
     """Randomly choose between ACCEPT and REJECT."""
@@ -49,8 +72,8 @@ def generate_flow_log_entry():
     src_addr = generate_random_ip()
     dst_addr = generate_random_ip()
     src_port = generate_random_port()
-    dst_port = random.choice(ports)
-    protocol = random.choice(protocol_nums)
+    dst_port = generate_random_port()
+    protocol = generate_random_protocol_number()
     packets = random.randint(1, 100)
     bytes_ = packets * random.randint(400, 1500)  # Average packet size between 400-1500 bytes
     start_time = int(time.time()) - random.randint(0, 10000)  # Some time in the past
@@ -69,9 +92,9 @@ def generate_flow_log_file(file_path, num_lines):
 
 def generate_random_lookup_entry():
     """Generate a single lookup table entry with randomized values."""
-    dstport = random.choice(ports)
-    protocol = random.choice(protocols)
-    tag = random.choice(tags)
+    dstport = generate_random_port()
+    protocol = generate_random_protocol_name()
+    tag = generate_random_tag()
     return [dstport, protocol, tag]
 
 def generate_lookup_table_csv(file_path, num_entries):
