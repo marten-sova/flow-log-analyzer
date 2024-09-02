@@ -1,4 +1,4 @@
-# flow-log-analyzer
+# V2 Flow Log Analyzer
 
 ## How to run locally
 
@@ -20,19 +20,18 @@
 
 `python3 test.py`
 
+### Generate test data
+
+`python3 generate_sample_data.py <flow_log_line_count> <lookup_table_line_count>`
+
 ## Assumptions
 
 - Supports default v2 log format only. Reference https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html
-- Tags can map to multiple (port, protocol) combinations. \_However, each (port, protocol) combination can have only one tag.
+- Tags can map to multiple (port, protocol) combinations. **However, each (port, protocol) combination can have only one tag.**
 - The requirements state "The matches should be case insensitive". I assume this refers to the protocol strings in the lookup table. Tag names remain case sensitive.
 - No tags are named "Untagged" (if they are, they will be counted as untagged!)
 
-## Pseudocode
+## Testing done so far
 
-0. Load preset dict mapping protocol numbers to keywords.
-1. Read in lookup table
-2. create dict1 for recognizing tags. map (dst_port, protocol_keyword) to tag_name
-3. create dict2 for counting tag occurences. map tag name to count.
-4. create dict3 for counting pair occurences. map (dst_port, protocol_keyword) to int.
-5. go through log file and add each line to dict3
-6. for pairs in dict3, add that count to dict2.
+- Works with provided sample data in exercise description.
+- Used `generate_sample_data.py` script to test logs with 10,000,000 entries (>1GB) and lookup tables with 10,000 entries, appears to work successfully.
