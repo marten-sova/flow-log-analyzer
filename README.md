@@ -13,7 +13,7 @@ The dstport and protocol combination decide what tag can be applied.
 1. `git clone https://github.com/marten-sova/flow-log-analyzer.git`
 2. `cd flow-log-analyzer`
 
-### Activate virtual env
+### Optional: run in virtual env
 
 3. `python3 -m venv venv`
 4. `source venv/bin/activate`. _if you get permission denied, fix with:_ `chmod a+x ./venv/bin/activate`
@@ -22,11 +22,13 @@ The dstport and protocol combination decide what tag can be applied.
 
 `python3 analyze.py sample-flow-logs.txt sample-lookup-table.csv`
 
-### Run tests
+### Run unit tests
 
 `python3 test.py`
 
-### Generate test data
+### Generate random logs for testing
+
+This script is used to generate randomized logs and lookup tables for stress testing the program. Entries are randomized valid records/mappings with a bias toward a subset of tag names and common protocols.
 
 `python3 generate_sample_data.py <flow_log_line_count> <lookup_table_line_count>`
 
