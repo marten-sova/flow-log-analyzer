@@ -20,7 +20,10 @@ IANA_IDX = 7 # 8th column in v2 flow log format
 def get_protocol_name(protocol_number):
     """Return protocol name based on IANA protocol number."""
     try:
-        return iana_map.get(protocol_number, "unknown")
+        protocol_name = iana_map.get(protocol_number, "unknown")
+        if len(protocol_name) > 0:
+            return protocol_name
+        return "unknown"
     except ValueError:
         print(f"ERROR: Invalid protocol number: {protocol_number}")
         return "unknown"
@@ -40,7 +43,7 @@ def read_lookup_table(lookup_table_file):
                 protocol = row['protocol'].lower()
                 tag = row['tag']
                 if (dstport, protocol) in tags:
-                    print(f"WARNING: Duplicate entry for dstport:{dstport}, protocol:{protocol} in lookup table. Skipping.")
+                    print(f"Ignoring tag {tag} in lookup table. ({dstport},{protocol}) is already mapped to {tags[(dstport, protocol)]}.")
                 else:
                     tags[(dstport, protocol)] = tag
     except FileNotFoundError:
