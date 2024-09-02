@@ -40,7 +40,7 @@ def read_lookup_table(lookup_table_file):
                 protocol = row['protocol'].lower()
                 tag = row['tag']
                 if (dstport, protocol) in tags:
-                    print(f"ERROR: Duplicate entry for dstport:{dstport}, protocol:{protocol} in lookup table. Skipping.")
+                    print(f"WARNING: Duplicate entry for dstport:{dstport}, protocol:{protocol} in lookup table. Skipping.")
                 else:
                     tags[(dstport, protocol)] = tag
     except FileNotFoundError:
