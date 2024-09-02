@@ -1,5 +1,11 @@
 # V2 Flow Log Analyzer
 
+Parses a flow log file and maps each row to a tag based on a lookup table.
+Outputs summary of tag frequency and unique port/protocol combinations.
+
+The lookup table is defined as a csv file, and it has 3 columns, `dstport,protocol,tag`.
+The dstport and protocol combination decide what tag can be applied.
+
 ## How to run locally
 
 ### Download source code
